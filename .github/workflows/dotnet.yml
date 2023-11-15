@@ -1,0 +1,34 @@
+name: Dotnet Build and Test
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    env:
+      buildConfiguration: "Release"
+      sln: "./Minsk.sln"
+
+    runs-on: ubuntu-latest
+
+    permissions: write-all
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore $sln
+
+      - name: Build
+        run: dotnet build --configuration $buildConfiguration $sln
