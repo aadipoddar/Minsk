@@ -1,6 +1,6 @@
 ﻿namespace Minsk.CodeAnalysis
 {
-    sealed class ParanthesizedExpressionSyntax : ExpressionSyntax
+    public sealed class ParanthesizedExpressionSyntax : ExpressionSyntax
     {
         public ParanthesizedExpressionSyntax(SyntaxToken openParanthesisToken, ExpressionSyntax expression, SyntaxToken closeParanthesisToken)
         {

@@ -2,7 +2,7 @@
 {
     // Lexer - Creates Words
     // It produces token which you think as leaves in a tree
-    class Lexer
+    internal sealed class Lexer
     {
         private readonly string _text;
         private int _position;
