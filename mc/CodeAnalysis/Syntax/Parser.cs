@@ -1,4 +1,6 @@
-﻿namespace Minsk.CodeAnalysis
+﻿using Minsk.CodeAnalysis;
+
+namespace mc.CodeAnalysis.Syntax
 {
     // Parser Produces actual sentences
     // They can be understood as the actual trees

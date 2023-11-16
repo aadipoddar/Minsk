@@ -1,4 +1,4 @@
-﻿namespace Minsk.CodeAnalysis
+﻿namespace mc.CodeAnalysis.Syntax
 {
     public sealed class SyntaxTree
     {

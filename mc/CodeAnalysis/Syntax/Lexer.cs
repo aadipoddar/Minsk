@@ -1,4 +1,4 @@
-﻿namespace Minsk.CodeAnalysis
+﻿namespace mc.CodeAnalysis.Syntax
 {
     // Lexer - Creates Words
     // It produces token which you think as leaves in a tree
