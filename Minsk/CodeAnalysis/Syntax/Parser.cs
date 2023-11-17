@@ -1,12 +1,10 @@
 ﻿namespace Minsk.CodeAnalysis.Syntax
 {
-    // Parser Produces actual sentences
-    // They can be understood as the actual trees
     internal sealed class Parser
     {
         private readonly SyntaxToken[] _tokens;
 
-        private List<string> _diagnostics = new();
+        private DiagnosticBag _diagnostics = new();
         private int _position;
 
         public Parser(string text)
@@ -33,7 +31,7 @@
             _diagnostics.AddRange(lexer.Diagnostics);
         }
 
-        public IEnumerable<string> Diagnostics => _diagnostics;
+        public DiagnosticBag Diagnostics => _diagnostics;
 
         private SyntaxToken Peek(int offset)
         {
@@ -59,7 +57,7 @@
             if (Current.Kind == kind)
                 return NextToken();
 
-            _diagnostics.Add($"ERROR: Unexpected Token <{Current.Kind}>, expected <{kind}>");
+            _diagnostics.ReportUnexpectedToken(Current.Span, Current.Kind, kind);
 
             return new SyntaxToken(kind, Current.Position, null, null);
         }
