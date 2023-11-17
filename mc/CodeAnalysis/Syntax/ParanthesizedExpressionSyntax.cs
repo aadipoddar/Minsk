@@ -1,15 +1,15 @@
 ﻿namespace Minsk.CodeAnalysis.Syntax
 {
-    public sealed class ParanthesizedExpressionSyntax : ExpressionSyntax
+    public sealed class ParenthesizedExpressionSyntax : ExpressionSyntax
     {
-        public ParanthesizedExpressionSyntax(SyntaxToken openParanthesisToken, ExpressionSyntax expression, SyntaxToken closeParanthesisToken)
+        public ParenthesizedExpressionSyntax(SyntaxToken openParanthesisToken, ExpressionSyntax expression, SyntaxToken closeParanthesisToken)
         {
             OpenParanthesisToken = openParanthesisToken;
             Expression = expression;
             CloseParanthesisToken = closeParanthesisToken;
         }
 
-        public override SyntaxKind Kind => SyntaxKind.ParanthesizedExpression;
+        public override SyntaxKind Kind => SyntaxKind.ParenthesizedExpression;
 
         public SyntaxToken OpenParanthesisToken { get; }
         public ExpressionSyntax Expression { get; }

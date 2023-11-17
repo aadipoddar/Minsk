@@ -111,7 +111,7 @@
                         var expression = ParseExpression();
                         var right = MatchToken(SyntaxKind.CloseParenthesisToken);
 
-                        return new ParanthesizedExpressionSyntax(left, expression, right);
+                        return new ParenthesizedExpressionSyntax(left, expression, right);
                     }
 
                 case SyntaxKind.FalseKeyword:

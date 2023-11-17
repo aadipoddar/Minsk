@@ -28,6 +28,6 @@
         LiteralExpression,
         UnaryExpression,
         BinaryExpression,
-        ParanthesizedExpression
+        ParenthesizedExpression
     }
 }
