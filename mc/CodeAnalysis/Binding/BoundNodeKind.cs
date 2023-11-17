@@ -3,6 +3,7 @@
     internal enum BoundNodeKind
     {
         UnaryExpression,
-        LiteralExpression
+        LiteralExpression,
+        BinaryExpression
     }
 }
