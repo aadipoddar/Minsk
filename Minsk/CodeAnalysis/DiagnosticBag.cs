@@ -29,16 +29,17 @@ namespace Minsk.CodeAnalysis
             Report(span, message);
         }
 
-        public void ReportBadCharacter(int position, char charcater)
+        public void ReportBadCharacter(int position, char character)
         {
             var span = new TextSpan(position, 1);
-            var message = $"Bad Character Input: '{charcater}";
+            var message = $"Bad character input: '{character}'.";
             Report(span, message);
         }
 
         public void ReportUnexpectedToken(TextSpan span, SyntaxKind actualKind, SyntaxKind expectedKind)
         {
-            var message = $"Unexpected Token <{actualKind}>, expected <{expectedKind}>";
+            var message = $"Unexpected token <{actualKind}>, expected <{expectedKind}>.";
+            Report(span, message);
         }
 
         public void ReportUndefinedUnaryOperator(TextSpan span, string operatorText, Type operandType)
@@ -49,7 +50,13 @@ namespace Minsk.CodeAnalysis
 
         public void ReportUndefinedBinaryOperator(TextSpan span, string operatorText, Type leftType, Type rightType)
         {
-            var message = $"Binary Operator '{operatorText}' is not defined for type {leftType} and {rightType}";
+            var message = $"Binary operator '{operatorText}' is not defined for types {leftType} and {rightType}.";
+            Report(span, message);
+        }
+
+        public void ReportUndefinedName(TextSpan span, string name)
+        {
+            var message = $"Variable '{name}' doesn't exist.";
             Report(span, message);
         }
     }
