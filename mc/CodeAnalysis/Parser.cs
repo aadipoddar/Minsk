@@ -73,7 +73,20 @@ internal sealed class Parser
 
 	private ExpressionSyntax ParseExpression(int parentPrecedence = 0)
 	{
-		var left = ParsePrimaryExpression();
+
+		ExpressionSyntax left;
+		var unaryOperatorPrecendence = Current.Kind.GetUnaryOperatorPrecendence();
+
+		if (unaryOperatorPrecendence != 0 && unaryOperatorPrecendence >= parentPrecedence)
+		{
+			var operatorToken = NextToken();
+			var operand = ParseExpression(unaryOperatorPrecendence);
+			left = new UnaryExpressionSyntax(operatorToken, operand);
+		}
+		else
+		{
+			left = ParsePrimaryExpression();
+		}
 
 		while (true)
 		{
