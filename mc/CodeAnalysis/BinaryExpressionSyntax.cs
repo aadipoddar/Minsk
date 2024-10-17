@@ -1,25 +1,24 @@
-﻿namespace Minsk.CodeAnalysis
+﻿namespace Minsk.CodeAnalysis;
+
+public sealed class BinaryExpressionSyntax : ExpressionSyntax
 {
-    sealed class BinaryExpressionSyntax : ExpressionSyntax
-    {
-        public BinaryExpressionSyntax(ExpressionSyntax left, SyntaxToken operatorToken, ExpressionSyntax right)
-        {
-            Left = left;
-            OperatorToken = operatorToken;
-            Right = right;
-        }
+	public BinaryExpressionSyntax(ExpressionSyntax left, SyntaxToken operatorToken, ExpressionSyntax right)
+	{
+		Left = left;
+		OperatorToken = operatorToken;
+		Right = right;
+	}
 
-        public override SyntaxKind Kind => SyntaxKind.BinaryExpression;
+	public override SyntaxKind Kind => SyntaxKind.BinaryExpression;
 
-        public ExpressionSyntax Left { get; }
-        public SyntaxToken OperatorToken { get; }
-        public ExpressionSyntax Right { get; }
+	public ExpressionSyntax Left { get; }
+	public SyntaxToken OperatorToken { get; }
+	public ExpressionSyntax Right { get; }
 
-        public override IEnumerable<SyntaxNode> GetChildren()
-        {
-            yield return Left;
-            yield return OperatorToken;
-            yield return Right;
-        }
-    }
+	public override IEnumerable<SyntaxNode> GetChildren()
+	{
+		yield return Left;
+		yield return OperatorToken;
+		yield return Right;
+	}
 }

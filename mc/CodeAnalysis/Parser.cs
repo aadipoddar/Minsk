@@ -1,124 +1,123 @@
-﻿namespace Minsk.CodeAnalysis
+﻿namespace Minsk.CodeAnalysis;
+
+// Parser Produces actual sentences
+// They can be understood as the actual trees
+internal sealed class Parser
 {
-    // Parser Produces actual sentences
-    // They can be understood as the actual trees
-    class Parser
-    {
-        private readonly SyntaxToken[] _tokens;
+	private readonly SyntaxToken[] _tokens;
 
-        private List<string> _diagnostics = new();
-        private int _position;
+	private List<string> _diagnostics = new();
+	private int _position;
 
-        public Parser(string text)
-        {
-            var tokens = new List<SyntaxToken>();
+	public Parser(string text)
+	{
+		var tokens = new List<SyntaxToken>();
 
-            var lexer = new Lexer(text);
+		var lexer = new Lexer(text);
 
-            SyntaxToken token;
+		SyntaxToken token;
 
-            do
-            {
-                token = lexer.NextToken();
+		do
+		{
+			token = lexer.NextToken();
 
-                if (token.Kind != SyntaxKind.WhitespaceToken &&
-                    token.Kind != SyntaxKind.BadToken)
-                {
-                    tokens.Add(token);
-                }
+			if (token.Kind != SyntaxKind.WhitespaceToken &&
+				token.Kind != SyntaxKind.BadToken)
+			{
+				tokens.Add(token);
+			}
 
-            } while (token.Kind != SyntaxKind.EndOfFileToken);
+		} while (token.Kind != SyntaxKind.EndOfFileToken);
 
-            _tokens = tokens.ToArray();
-            _diagnostics.AddRange(lexer.Diagnostics);
-        }
+		_tokens = tokens.ToArray();
+		_diagnostics.AddRange(lexer.Diagnostics);
+	}
 
-        public IEnumerable<string> Diagnostics => _diagnostics;
+	public IEnumerable<string> Diagnostics => _diagnostics;
 
-        private SyntaxToken Peek(int offset)
-        {
-            var index = _position + offset;
+	private SyntaxToken Peek(int offset)
+	{
+		var index = _position + offset;
 
-            if (index >= _tokens.Length)
-                return _tokens[_tokens.Length - 1];
+		if (index >= _tokens.Length)
+			return _tokens[_tokens.Length - 1];
 
-            return _tokens[index];
-        }
+		return _tokens[index];
+	}
 
-        private SyntaxToken Current => Peek(0);
+	private SyntaxToken Current => Peek(0);
 
-        private SyntaxToken NextToken()
-        {
-            var current = Current;
-            _position++;
-            return current;
-        }
+	private SyntaxToken NextToken()
+	{
+		var current = Current;
+		_position++;
+		return current;
+	}
 
-        private SyntaxToken Match(SyntaxKind kind)
-        {
-            if (Current.Kind == kind)
-                return NextToken();
+	private SyntaxToken MatchToken(SyntaxKind kind)
+	{
+		if (Current.Kind == kind)
+			return NextToken();
 
-            _diagnostics.Add($"ERROR: Unexpected Token <{Current.Kind}>, expected <{kind}>");
+		_diagnostics.Add($"ERROR: Unexpected Token <{Current.Kind}>, expected <{kind}>");
 
-            return new SyntaxToken(kind, Current.Position, null, null);
-        }
+		return new SyntaxToken(kind, Current.Position, null, null);
+	}
 
-        private ExpressionSyntax ParseExpression()
-        {
-            return ParseTerm();
-        }
+	public SyntaxTree Parse()
+	{
+		var expression = ParseExpression();
+		var endOfFileToken = MatchToken(SyntaxKind.EndOfFileToken);
+		return new SyntaxTree(_diagnostics, expression, endOfFileToken);
+	}
 
-        public SyntaxTree Parse()
-        {
-            var expression = ParseTerm();
-            var endOfFileToken = Match(SyntaxKind.EndOfFileToken);
-            return new SyntaxTree(_diagnostics, expression, endOfFileToken);
-        }
+	private ExpressionSyntax ParseExpression()
+	{
+		return ParseTerm();
+	}
 
-        private ExpressionSyntax ParseTerm()
-        {
-            var left = ParseFactor();
+	private ExpressionSyntax ParseTerm()
+	{
+		var left = ParseFactor();
 
-            while (Current.Kind == SyntaxKind.PlusToken ||
-                Current.Kind == SyntaxKind.MinusToken)
-            {
-                var operatorToken = NextToken();
-                var right = ParseFactor();
-                left = new BinaryExpressionSyntax(left, operatorToken, right);
-            }
+		while (Current.Kind == SyntaxKind.PlusToken ||
+			Current.Kind == SyntaxKind.MinusToken)
+		{
+			var operatorToken = NextToken();
+			var right = ParseFactor();
+			left = new BinaryExpressionSyntax(left, operatorToken, right);
+		}
 
-            return left;
-        }
+		return left;
+	}
 
-        private ExpressionSyntax ParseFactor()
-        {
-            var left = ParsePrimaryExpression();
+	private ExpressionSyntax ParseFactor()
+	{
+		var left = ParsePrimaryExpression();
 
-            while (Current.Kind == SyntaxKind.StarToken ||
-                Current.Kind == SyntaxKind.SlashToken)
-            {
-                var operatorToken = NextToken();
-                var right = ParsePrimaryExpression();
-                left = new BinaryExpressionSyntax(left, operatorToken, right);
-            }
+		while (Current.Kind == SyntaxKind.StarToken ||
+			Current.Kind == SyntaxKind.SlashToken)
+		{
+			var operatorToken = NextToken();
+			var right = ParsePrimaryExpression();
+			left = new BinaryExpressionSyntax(left, operatorToken, right);
+		}
 
-            return left;
-        }
+		return left;
+	}
 
-        private ExpressionSyntax ParsePrimaryExpression()
-        {
-            if (Current.Kind == SyntaxKind.OpenParenthesisToken)
-            {
-                var left = NextToken();
-                var expression = ParseExpression();
-                var right = Match(SyntaxKind.CloseParenthesisToken);
+	private ExpressionSyntax ParsePrimaryExpression()
+	{
+		if (Current.Kind == SyntaxKind.OpenParenthesisToken)
+		{
+			var left = NextToken();
+			var expression = ParseExpression();
+			var right = MatchToken(SyntaxKind.CloseParenthesisToken);
 
-                return new ParanthesizedExpressionSyntax(left, expression, right);
-            }
+			return new ParanthesizedExpressionSyntax(left, expression, right);
+		}
 
-            var numberToken = Match(SyntaxKind.NumberToken);
-            return new NumberExpressionSyntax(numberToken);
-        }
-    }
+		var numberToken = MatchToken(SyntaxKind.NumberToken);
+		return new LiteralExpressionSyntax(numberToken);
+	}
 }

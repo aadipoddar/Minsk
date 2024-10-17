@@ -1,22 +1,21 @@
-﻿namespace Minsk.CodeAnalysis
+﻿namespace Minsk.CodeAnalysis;
+
+public sealed class SyntaxTree
 {
-    sealed class SyntaxTree
-    {
-        public SyntaxTree(IEnumerable<string> diagnostics, ExpressionSyntax root, SyntaxToken endOfFileToken)
-        {
-            Diagnostics = diagnostics.ToArray();
-            Root = root;
-            EndOfFileToken = endOfFileToken;
-        }
+	public SyntaxTree(IEnumerable<string> diagnostics, ExpressionSyntax root, SyntaxToken endOfFileToken)
+	{
+		Diagnostics = diagnostics.ToArray();
+		Root = root;
+		EndOfFileToken = endOfFileToken;
+	}
 
-        public IReadOnlyList<string> Diagnostics { get; }
-        public ExpressionSyntax Root { get; }
-        public SyntaxToken EndOfFileToken { get; }
+	public IReadOnlyList<string> Diagnostics { get; }
+	public ExpressionSyntax Root { get; }
+	public SyntaxToken EndOfFileToken { get; }
 
-        public static SyntaxTree Parse(string text)
-        {
-            var parser = new Parser(text);
-            return parser.Parse();
-        }
-    }
+	public static SyntaxTree Parse(string text)
+	{
+		var parser = new Parser(text);
+		return parser.Parse();
+	}
 }
