@@ -1,31 +1,28 @@
-﻿using Minsk.CodeAnalysis.Syntax;
-using Minsk.CodeAnalysis;
+﻿using Minsk.CodeAnalysis;
 using Minsk.CodeAnalysis.Binding;
+using Minsk.CodeAnalysis.Syntax;
 
 namespace Minsk;
 
 internal static class Program
 {
-	static void Main(string[] args)
+	private static void Main()
 	{
 		var showTree = false;
 
 		while (true)
 		{
 			Console.Write("> ");
-
 			var line = Console.ReadLine();
-
 			if (string.IsNullOrWhiteSpace(line))
 				return;
 
 			if (line == "#showTree")
 			{
 				showTree = !showTree;
-				Console.WriteLine(showTree ? "Showing Parse Trees." : "Not Showing Parse Trees.");
+				Console.WriteLine(showTree ? "Showing parse trees." : "Not showing parse trees");
 				continue;
 			}
-
 			else if (line == "#cls")
 			{
 				Console.Clear();
@@ -37,6 +34,7 @@ internal static class Program
 			var boundExpression = binder.BindExpression(syntaxTree.Root);
 
 			var diagnostics = syntaxTree.Diagnostics.Concat(binder.Diagnostics).ToArray();
+
 
 			if (showTree)
 			{
@@ -51,12 +49,11 @@ internal static class Program
 				var result = e.Evaluate();
 				Console.WriteLine(result);
 			}
-
 			else
 			{
 				Console.ForegroundColor = ConsoleColor.DarkRed;
 
-				foreach (var diagnostic in syntaxTree.Diagnostics)
+				foreach (var diagnostic in diagnostics)
 					Console.WriteLine(diagnostic);
 
 				Console.ResetColor();
@@ -66,18 +63,13 @@ internal static class Program
 
 	static void PrettyPrint(SyntaxNode node, string indent = "", bool isLast = true)
 	{
-		// └──
-		// ├──
-		// │
-
 		var marker = isLast ? "└──" : "├──";
 
 		Console.Write(indent);
 		Console.Write(marker);
-
 		Console.Write(node.Kind);
 
-		if (node is SyntaxToken t && t.Value is not null)
+		if (node is SyntaxToken t && t.Value != null)
 		{
 			Console.Write(" ");
 			Console.Write(t.Value);

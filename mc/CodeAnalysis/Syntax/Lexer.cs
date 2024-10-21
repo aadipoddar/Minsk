@@ -1,96 +1,96 @@
-﻿namespace Minsk.CodeAnalysis.Syntax;
+namespace Minsk.CodeAnalysis.Syntax;
 
-// Lexer - Creates Words
-// It produces token which you think as leaves in a tree
-internal class Lexer
+internal sealed class Lexer
 {
-    private readonly string _text;
-    private int _position;
-    private List<string> _diagnostics = new();
+	private readonly string _text;
+	private int _position;
+	private List<string> _diagnostics = new List<string>();
 
-    public Lexer(string text)
-    {
-        _text = text;
-    }
+	public Lexer(string text)
+	{
+		_text = text;
+	}
 
-    public IEnumerable<string> Diagnostics => _diagnostics;
+	public IEnumerable<string> Diagnostics => _diagnostics;
 
-    private char Current
-    {
-        get
-        {
-            if (_position >= _text.Length)
-                return '\0';
+	private char Current
+	{
+		get
+		{
+			if (_position >= _text.Length)
+				return '\0';
 
-            return _text[_position];
-        }
-    }
+			return _text[_position];
+		}
+	}
 
-    private void Next()
-    {
-        _position++;
-    }
+	private void Next()
+	{
+		_position++;
+	}
 
+	public SyntaxToken Lex()
+	{
+		if (_position >= _text.Length)
+			return new SyntaxToken(SyntaxKind.EndOfFileToken, _position, "\0", null);
 
-    // Find the next word and return
-    public SyntaxToken Lex()
-    {
-        // <numbers>
-        // + - * / ( )
-        // <whitespaces>
+		if (char.IsDigit(Current))
+		{
+			var start = _position;
 
-        if (_position >= _text.Length)
-            return new SyntaxToken(SyntaxKind.EndOfFileToken, _position, "\0", null);
+			while (char.IsDigit(Current))
+				Next();
 
-        if (char.IsDigit(Current))
-        {
-            var start = _position;
+			var length = _position - start;
+			var text = _text.Substring(start, length);
+			if (!int.TryParse(text, out var value))
+				_diagnostics.Add($"The number {_text} isn't valid Int32.");
 
-            while (char.IsDigit(Current))
-                Next();
+			return new SyntaxToken(SyntaxKind.NumberToken, start, text, value);
+		}
 
-            // We keep reading numbers
-            // At the end we just create the word that represents the number
+		if (char.IsWhiteSpace(Current))
+		{
+			var start = _position;
 
-            var length = _position - start;
-            var text = _text.Substring(start, length);
+			while (char.IsWhiteSpace(Current))
+				Next();
 
-            if (!int.TryParse(text, out var value))
-                _diagnostics.Add($"The Number {_text} Isn't a valid Int32");
+			var length = _position - start;
+			var text = _text.Substring(start, length);
+			return new SyntaxToken(SyntaxKind.WhitespaceToken, start, text, null);
+		}
 
-            return new SyntaxToken(SyntaxKind.NumberToken, start, text, value);
-        }
+		if (char.IsLetter(Current))
+		{
+			var start = _position;
 
-        if (char.IsWhiteSpace(Current))
-        {
-            var start = _position;
+			while (char.IsLetter(Current))
+				Next();
 
-            while (char.IsWhiteSpace(Current))
-                Next();
+			var length = _position - start;
+			var text = _text.Substring(start, length);
+			var kind = SyntaxFacts.GetKeywordKind(text);
+			return new SyntaxToken(kind, start, text, null);
+		}
 
-            var length = _position - start;
-            var text = _text.Substring(start, length);
+		switch (Current)
+		{
+			case '+':
+				return new SyntaxToken(SyntaxKind.PlusToken, _position++, "+", null);
+			case '-':
+				return new SyntaxToken(SyntaxKind.MinusToken, _position++, "-", null);
+			case '*':
+				return new SyntaxToken(SyntaxKind.StarToken, _position++, "*", null);
+			case '/':
+				return new SyntaxToken(SyntaxKind.SlashToken, _position++, "/", null);
+			case '(':
+				return new SyntaxToken(SyntaxKind.OpenParenthesisToken, _position++, "(", null);
+			case ')':
+				return new SyntaxToken(SyntaxKind.CloseParenthesisToken, _position++, ")", null);
+		}
 
-            return new SyntaxToken(SyntaxKind.WhitespaceToken, start, text, null);
-        }
-
-        switch (Current)
-        {
-            case '+':
-                return new SyntaxToken(SyntaxKind.PlusToken, _position++, "+", null);
-            case '-':
-                return new SyntaxToken(SyntaxKind.MinusToken, _position++, "-", null);
-            case '*':
-                return new SyntaxToken(SyntaxKind.StarToken, _position++, "*", null);
-            case '/':
-                return new SyntaxToken(SyntaxKind.SlashToken, _position++, "/", null);
-            case '(':
-                return new SyntaxToken(SyntaxKind.OpenParenthesisToken, _position++, "(", null);
-            case ')':
-                return new SyntaxToken(SyntaxKind.CloseParenthesisToken, _position++, ")", null);
-        }
-
-        _diagnostics.Add($"ERROR: Bad Character Input: '{Current}");
-        return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position - 1, 1), null);
-    }
+		_diagnostics.Add($"ERROR: bad character input: '{Current}'");
+		return new SyntaxToken(SyntaxKind.BadToken, _position++, _text.Substring(_position - 1, 1), null);
+	}
 }
