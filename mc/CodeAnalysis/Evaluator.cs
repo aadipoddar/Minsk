@@ -1,4 +1,6 @@
-﻿namespace Minsk.CodeAnalysis;
+﻿using mc.CodeAnalysis.Syntax;
+
+namespace Minsk.CodeAnalysis;
 
 public sealed class Evaluator
 {
