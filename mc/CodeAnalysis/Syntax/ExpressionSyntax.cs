@@ -1,4 +1,4 @@
-﻿namespace mc.CodeAnalysis.Syntax;
+﻿namespace Minsk.CodeAnalysis.Syntax;
 
 public abstract class ExpressionSyntax : SyntaxNode
 {

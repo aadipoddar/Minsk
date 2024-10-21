@@ -1,4 +1,4 @@
-﻿namespace mc.CodeAnalysis.Syntax;
+﻿namespace Minsk.CodeAnalysis.Syntax;
 
 // Represents a word in our languge
 public sealed class SyntaxToken : SyntaxNode
