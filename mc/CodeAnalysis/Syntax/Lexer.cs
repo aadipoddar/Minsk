@@ -14,16 +14,17 @@ internal sealed class Lexer
 	public IEnumerable<string> Diagnostics => _diagnostics;
 
 	private char Current => Peek(0);
-	private char LookAhead => Peek(1);
+
+	private char Lookahead => Peek(1);
 
 	private char Peek(int offset)
 	{
 		var index = _position + offset;
 
-		if (_position >= _text.Length)
+		if (index >= _text.Length)
 			return '\0';
 
-		return _text[_position];
+		return _text[index];
 	}
 
 	private void Next()
@@ -93,11 +94,11 @@ internal sealed class Lexer
 			case '!':
 				return new SyntaxToken(SyntaxKind.BangToken, _position++, "!", null);
 			case '&':
-				if (LookAhead == '&')
+				if (Lookahead == '&')
 					return new SyntaxToken(SyntaxKind.AmpersandAmpersandToken, _position += 2, "&&", null);
 				break;
 			case '|':
-				if (LookAhead == '|')
+				if (Lookahead == '|')
 					return new SyntaxToken(SyntaxKind.PipePipeToken, _position += 2, "||", null);
 				break;
 		}
