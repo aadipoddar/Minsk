@@ -14,6 +14,8 @@ public enum SyntaxKind
 	BangToken,
 	AmpersandAmpersandToken,
 	PipePipeToken,
+	EqualsEqualsToken,
+	BangEqualsToken,
 	OpenParenthesisToken,
 	CloseParenthesisToken,
 	IdentifierToken,
