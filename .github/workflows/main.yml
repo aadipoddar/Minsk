@@ -10,8 +10,8 @@ jobs:
   build:
     env:
       buildConfiguration: "Release"
-      sln: "./src/Minsk.sln"
-      tests: "./src/Minsk.Tests/Minsk.Tests.csproj"
+      sln: "./Minsk.sln"
+      tests: "./Minsk.Tests/Minsk.Tests.csproj"
 
     runs-on: ubuntu-latest
 
