@@ -10,7 +10,8 @@ jobs:
   build:
     env:
       buildConfiguration: "Release"
-      sln: "./Minsk.sln"
+      sln: "./src/Minsk.sln"
+      tests: "./src/Minsk.Tests/Minsk.Tests.csproj"
 
     runs-on: ubuntu-latest
 
@@ -32,3 +33,15 @@ jobs:
 
       - name: Build
         run: dotnet build --configuration $buildConfiguration $sln
+
+      - name: Test
+        run: dotnet test $tests --logger "trx;LogFileName=test-results.trx" || true
+
+      - name: Test Report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: DotNET Tests
+          path: "**/test-results.trx"
+          reporter: dotnet-trx
+          fail-on-error: true
