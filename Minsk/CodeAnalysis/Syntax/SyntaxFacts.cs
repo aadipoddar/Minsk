@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization.Metadata;
-
 namespace Minsk.CodeAnalysis.Syntax;
 
 public static class SyntaxFacts
