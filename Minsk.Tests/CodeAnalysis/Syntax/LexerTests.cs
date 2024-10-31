@@ -68,39 +68,33 @@ public class LexerTests
 
 	private static IEnumerable<(SyntaxKind kind, string text)> GetTokens()
 	{
-		return new[]
+		var fixedTokens = Enum.GetValues(typeof(SyntaxKind))
+							  .Cast<SyntaxKind>()
+							  .Select(k => (kind: k, text: SyntaxFacts.GetText(k)))
+							  .Where(t => t.text != null);
+
+
+		var dynamicTokens = new[]
 		{
-			(SyntaxKind.PlusToken, "+"),
-			(SyntaxKind.MinusToken, "-"),
-			(SyntaxKind.StarToken, "*"),
-			(SyntaxKind.SlashToken, "/"),
-			(SyntaxKind.BangToken, "!"),
-			(SyntaxKind.EqualsToken, "="),
-			(SyntaxKind.AmpersandAmpersandToken, "&&"),
-			(SyntaxKind.PipePipeToken, "||"),
-			(SyntaxKind.EqualsEqualsToken, "=="),
-			(SyntaxKind.BangEqualsToken, "!="),
-			(SyntaxKind.OpenParenthesisToken, "("),
-			(SyntaxKind.CloseParenthesisToken, ")"),
-			(SyntaxKind.FalseKeyword, "false"),
-			(SyntaxKind.TrueKeyword, "true"),
-			(SyntaxKind.NumberToken, "1"),
-			(SyntaxKind.NumberToken, "123"),
-			(SyntaxKind.IdentifierToken, "a"),
-			(SyntaxKind.IdentifierToken, "abc"),
-		};
+				(SyntaxKind.NumberToken, "1"),
+				(SyntaxKind.NumberToken, "123"),
+				(SyntaxKind.IdentifierToken, "a"),
+				(SyntaxKind.IdentifierToken, "abc"),
+			};
+
+		return fixedTokens.Concat(dynamicTokens);
 	}
 
 	private static IEnumerable<(SyntaxKind kind, string text)> GetSeparators()
 	{
 		return new[]
 		{
-			(SyntaxKind.WhitespaceToken, " "),
-			(SyntaxKind.WhitespaceToken, "  "),
-			(SyntaxKind.WhitespaceToken, "\r"),
-			(SyntaxKind.WhitespaceToken, "\n"),
-			(SyntaxKind.WhitespaceToken, "\r\n")
-		};
+				(SyntaxKind.WhitespaceToken, " "),
+				(SyntaxKind.WhitespaceToken, "  "),
+				(SyntaxKind.WhitespaceToken, "\r"),
+				(SyntaxKind.WhitespaceToken, "\n"),
+				(SyntaxKind.WhitespaceToken, "\r\n")
+			};
 	}
 
 	private static bool RequiresSeparator(SyntaxKind t1Kind, SyntaxKind t2Kind)
