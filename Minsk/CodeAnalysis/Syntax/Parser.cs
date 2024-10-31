@@ -1,5 +1,7 @@
 using System.Collections.Immutable;
 
+using Minsk.CodeAnalysis.Text;
+
 namespace Minsk.CodeAnalysis.Syntax;
 
 internal sealed class Parser
@@ -9,7 +11,7 @@ internal sealed class Parser
 
 	private int _position;
 
-	public Parser(string text)
+	public Parser(SourceText text)
 	{
 		var tokens = new List<SyntaxToken>();
 
