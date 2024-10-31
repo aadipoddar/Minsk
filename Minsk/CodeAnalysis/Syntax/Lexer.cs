@@ -1,3 +1,5 @@
+using Minsk.CodeAnalysis.Text;
+
 namespace Minsk.CodeAnalysis.Syntax;
 
 internal sealed class Lexer
