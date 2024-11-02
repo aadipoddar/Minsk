@@ -10,8 +10,8 @@ jobs:
   build:
     env:
       buildConfiguration: "Release"
-      sln: "./Minsk.sln"
-      tests: "./Minsk.Tests/Minsk.Tests.csproj"
+      sln: "./src/Minsk.sln"
+      tests: "./src/Minsk.Tests/Minsk.Tests.csproj"
 
     runs-on: ubuntu-latest
 
@@ -32,10 +32,10 @@ jobs:
         run: dotnet restore $sln
 
       - name: Build
-        run: dotnet build --configuration $buildConfiguration $sln
+        run: dotnet build --configuration $(buildConfiguration) $(sln)
 
       - name: Test
-        run: dotnet test $tests --logger "trx;LogFileName=test-results.trx" || true
+        run: dotnet test $(tests) --logger "trx;LogFileName=test-results.trx" || true
 
       - name: Test Report
         uses: dorny/test-reporter@v1
