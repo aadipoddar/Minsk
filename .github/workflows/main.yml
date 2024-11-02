@@ -35,7 +35,7 @@ jobs:
         run: dotnet build --configuration $buildConfiguration $sln
 
       - name: Test
-        run: dotnet test $(tests) --logger "trx;LogFileName=test-results.trx" || true
+        run: dotnet test $tests --logger "trx;LogFileName=test-results.trx" || true
 
       - name: Test Report
         uses: dorny/test-reporter@v1
