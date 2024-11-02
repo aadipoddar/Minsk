@@ -32,7 +32,7 @@ jobs:
         run: dotnet restore $sln
 
       - name: Build
-        run: dotnet build --configuration $(buildConfiguration) $(sln)
+        run: dotnet build --configuration $buildConfiguration $sln
 
       - name: Test
         run: dotnet test $(tests) --logger "trx;LogFileName=test-results.trx" || true
