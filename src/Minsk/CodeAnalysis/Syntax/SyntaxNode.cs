@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 
 using Minsk.CodeAnalysis.Text;
@@ -48,10 +45,18 @@ public abstract class SyntaxNode
 
 	private static void PrettyPrint(TextWriter writer, SyntaxNode node, string indent = "", bool isLast = true)
 	{
+		var isToConsole = writer == Console.Out;
 		var marker = isLast ? "└──" : "├──";
+
+		if (isToConsole)
+			Console.ForegroundColor = ConsoleColor.DarkGray;
 
 		writer.Write(indent);
 		writer.Write(marker);
+
+		if (isToConsole)
+			Console.ForegroundColor = node is SyntaxToken ? ConsoleColor.Blue : ConsoleColor.Cyan;
+
 		writer.Write(node.Kind);
 
 		if (node is SyntaxToken t && t.Value != null)
@@ -59,6 +64,9 @@ public abstract class SyntaxNode
 			writer.Write(" ");
 			writer.Write(t.Value);
 		}
+
+		if (isToConsole)
+			Console.ResetColor();
 
 		writer.WriteLine();
 

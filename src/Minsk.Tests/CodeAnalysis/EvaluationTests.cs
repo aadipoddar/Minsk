@@ -1,9 +1,5 @@
-using System.Collections.Generic;
-
 using Minsk.CodeAnalysis;
 using Minsk.CodeAnalysis.Syntax;
-
-using Xunit;
 
 namespace Minsk.Tests.CodeAnalysis;
 

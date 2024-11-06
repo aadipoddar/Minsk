@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-using Minsk.CodeAnalysis.Syntax;
-
-using Xunit;
+﻿using Minsk.CodeAnalysis.Syntax;
 
 namespace Minsk.Tests.CodeAnalysis.Syntax;
 

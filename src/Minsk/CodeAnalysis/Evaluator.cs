@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Minsk.CodeAnalysis.Binding;
+﻿using Minsk.CodeAnalysis.Binding;
 
 namespace Minsk.CodeAnalysis;
 

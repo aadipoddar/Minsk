@@ -1,5 +1,3 @@
-using System;
-
 namespace Minsk.CodeAnalysis.Binding;
 
 internal sealed class BoundVariableExpression : BoundExpression

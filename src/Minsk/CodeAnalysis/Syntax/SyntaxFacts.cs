@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Minsk.CodeAnalysis.Syntax;
 
 public static class SyntaxFacts

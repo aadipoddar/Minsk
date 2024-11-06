@@ -1,5 +1,3 @@
-using System;
-
 namespace Minsk.CodeAnalysis;
 
 public sealed class VariableSymbol

@@ -1,7 +1,5 @@
 using Minsk.CodeAnalysis.Text;
 
-using Xunit;
-
 namespace Minsk.Tests.CodeAnalysis.Text;
 
 public class SourceTextTests
